@@ -1,0 +1,188 @@
+.MapContainer {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center; /* Align content to the top */
+  
+  
+  flex-direction: column; /* Stack elements vertically */
+  height: auto; /* Allow height to adjust based on content */
+  width: 100%;
+}
+
+.map-box {
+  width: 100vw; /* Set the width of the box */
+  height: 100vh; /* Set the height of the box */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white; /* Background color for visibility */
+  border-radius: 10px; /* Optional: Rounded corners */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow */
+  overflow: hidden; /* Ensures map stays inside */
+}
+
+.map-wrapper {
+  flex-grow: 1;
+}
+  
+.side-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 250px;
+  height: 750px;
+  background-color: rgba(255, 255, 255, 0.7);;
+  border-radius: 10px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  transform: translateX(200%);
+  transition: transform 0.3s ease-in-out;
+  overflow-y: auto;  /* Enables vertical scrolling */
+  overflow-x: hidden;
+}
+
+.side-panel h1 {
+  font-size: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+.side-panel.visible {
+  transform: translateX(0);
+}
+
+.close-btn {
+  background: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.slider-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.slider-item label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.split-label {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.split-label span {
+  margin-left: auto;
+}
+.slider-textbox {
+  width: 80px;
+  margin-left: 5px;
+  text-align: right;
+  border: 1px solid #ccc;
+  padding: 2px;
+}
+
+.side-panel.ranking {
+  transform: translateX(0);
+}
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 180px;
+  height: 30px;
+  margin-top: 10px; /* Adjust spacing */
+}
+
+/* Hide default checkbox */
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider */
+.slider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  color: white;
+  transition: .4s;
+  border-radius: 30px;
+  text-align: center;
+}
+
+/* Circle inside slider */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+/* Toggle ON state */
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(150px);
+}
+
+
+/* Progress bars */
+.progress-bar-container {
+  height: 20px;
+  background-color: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #0033A0;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.split-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.score-text {
+  text-align: right;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.slider-item {
+  margin-bottom: 1rem;
+}

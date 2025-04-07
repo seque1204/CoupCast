@@ -1,35 +1,86 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import Map from './components/Map';
+import CountryDataSearch from './CountryDataSearch';
+import Team from './components/team';
+import About from './components/About';
+import "./App.css";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [clearSearchTrigger, setClearSearchTrigger] = useState(false);
+  const [currentPage, setCurrentPage] = useState(window.location.hash || '#Map');
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const newHash = window.location.hash || '#Map';
+      setCurrentPage(newHash);
+      
+      // Clear country selection when switching pages
+      if (newHash !== '#Map') {
+        setSelectedCountry(null);
+      }
+    };
+
+    // Initialize hash if empty
+    if (!window.location.hash) {
+      window.location.hash = '#Map';
+    }
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const clearSearch = () => {
+    setClearSearchTrigger(true);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="App">
+      <div className="header">
+        <div className="logo-container">
+          <img src="/logo-uk.png" alt="Logo" className="logo" />
+        </div>
+        <div className="text-container">
+          <span className="top-text">University of Kentucky</span>
+          <span className="bottom-text">Department of Political Science</span>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="#Map">Map</a></li>
+            <li><a href="#About">About</a></li>
+            <li><a href="#TeamInfo">Team Info</a></li>
+            <li>
+              <a 
+                href="https://tek.uky.edu/"  // Replace with your actual TEK URL
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                About TEK
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      {/* If current page is #TeamInfo, show the Team component */}
+      {currentPage === '#TeamInfo' ? (
+        <Team />
+      ) : currentPage === '#About' ? (
+        // If current page is #About, show the About component
+        <About />
+      ) : (
+        // If current page is not #TeamInfo, show the Map and CountryDataSearch components
+        <>
+          <CountryDataSearch 
+            onCountrySelect={setSelectedCountry} 
+            clearSearchTrigger={clearSearchTrigger}
+            onResetClearSearch={() => setClearSearchTrigger(false)}
+          />
+          <Map externalSelectedCountry={selectedCountry} onClearSearch={clearSearch} />
+        </>
+      )}
+    </div>
+  );
+};
 
-export default App
+export default App;
