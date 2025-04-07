@@ -36,7 +36,7 @@ function CountryDataSearch({ onCountrySelect, clearSearchTrigger, onResetClearSe
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://raw.githubusercontent.com/thynec/CoupCats/refs/heads/main/current.json"
+          "https://raw.githubusercontent.com/thynec/CoupCats/refs/heads/main/recent_data.json"
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

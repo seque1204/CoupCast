@@ -116,7 +116,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         try {
           // Fetch first dataset
           const response = await fetch(
-            "https://raw.githubusercontent.com/thynec/CoupCats/refs/heads/main/current.json"
+            "https://raw.githubusercontent.com/thynec/CoupCats/refs/heads/main/recent_data.json"
           );
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -126,7 +126,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   
           // Fetch second dataset
           const responseOG = await fetch(
-            "https://raw.githubusercontent.com/thynec/CoupCats/refs/heads/main/current.json"
+            "https://raw.githubusercontent.com/thynec/CoupCats/refs/heads/main/recent_data.json"
           );
           if (!responseOG.ok) {
             throw new Error(`HTTP error! Status: ${responseOG.status}`);
@@ -317,7 +317,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
       try {
         // Fetch first dataset
         const response = await fetch(
-          "https://raw.githubusercontent.com/thynec/CoupCats/refs/heads/main/current.json"
+          "https://raw.githubusercontent.com/thynec/CoupCats/refs/heads/main/recent_data.json"
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
