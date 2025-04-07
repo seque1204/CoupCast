@@ -192,7 +192,9 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         setSliderValues(prev => ({
           ...prev,
           [countryName]: Object.keys(defaultSliders).reduce((acc, key) => {
-            acc[key] = countryData[key].toFixed(2) ?? "";
+            acc[key] = (typeof countryData[key] === "number" && isFinite(countryData[key]))
+              ? countryData[key].toFixed(2)
+              : "";
             return acc;
           }, {})
         }));
@@ -220,49 +222,48 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   };
 
   const handleSliderChange = (e, key) => {
-    
     const sliderVal = Number(e.target.value); // ensure it's a number
-    
-    // Cache objects
-    const countryData = data.find((s) => s['country'] === selectedCountry);
-    const countryDataOG = dataOG.find((s) => s['country'] === selectedCountry);
-    
-    // Update state for display values
-    if (selectedCountry) {
+  
+    const countryData = data.find((s) => s.country === selectedCountry);
+    const countryDataOG = dataOG.find((s) => s.country === selectedCountry);
+  
+    if (selectedCountry && countryData && countryDataOG) {
+      const originalValue = countryDataOG[key];
+      const updatedValue = originalValue * (1 + sliderVal / 100);
+  
+      // Update the actual model data
+      countryData[key] = updatedValue;
+  
+      // Calculate prediction
+      const pce      = countryData['pce'] ?? 0;
+      const pce2     = countryData['pce2'] ?? 0;
+      const pce3     = countryData['pce3'] ?? 0;
+      const military = countryData['milit.y'] ?? 0;
+      const cold     = countryData['cold'] ?? 0;
+  
+      const x = 0.003 * pce + 0.00015 * pce2 + 0.0000035 * pce3 + 0.5 * military + 0.2 * cold + 0.000001;
+      countryData['prediction_prob'] = 1 / (1 + Math.exp(-x));
+  
+      // Set display state (slider value % and updated number)
       setCountrySliders(prev => ({
         ...prev,
         [selectedCountry]: {
           ...prev[selectedCountry],
-          [key]: sliderVal
+          [key]: sliderVal // % change
         }
       }));
-      
+  
       setSliderValues(prev => ({
         ...prev,
         [selectedCountry]: {
           ...prev[selectedCountry],
-          [key]: (countryDataOG[key] * (1 + sliderVal / 100)).toFixed(2)
+          [key]: isFinite(updatedValue) ? updatedValue.toFixed(2) : "N/A"
         }
       }));
-
-    // If found, update the data immutably (or create a new copy)
-    if (countryData && countryDataOG) {
-      // Compute new value based on original data
-      countryData[key] = countryDataOG[key] * (1 + sliderVal / 100);
-      
-      // Now compute x using the updated countryData
-      let x = 0.003 * countryData['pce'] +
-              0.00015 * countryData['pce2'] +
-              0.0000035 * countryData['pce3'] +
-              0.5 * countryData['milit.y'] +
-              0.2 * countryData['cold'] +
-              0.000001;
-      
-      countryData['prediction_prob'] = 1 / (1 + Math.exp(-x));
-      console.log("Updated data:", countryData[key], countryData['prediction_prob']);
+  
+      console.log("Updated:", key, updatedValue, "Prediction:", countryData['prediction_prob']);
     }
-  }
-};
+  };
 
   const handleTextInputChange = (e, key) => {
     const newValue = e.target.value;
@@ -277,37 +278,58 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
 
   const handleTextInputCommit = (e, key) => {
     if (e.type === "blur" || (e.type === "keydown" && e.key === "Enter")) {
-      let newValue = e.target.value.trim();
-      if (!isNaN(newValue) && newValue !== "") {
-          if (newValue > dataOG.find((s) => s['country'] === selectedCountry)[key] * 1.15) {
-            newValue = dataOG.find((s) => s['country'] === selectedCountry)[key] * 1.15;
-          }
-          if (newValue < dataOG.find((s) => s['country'] === selectedCountry)[key] * 0.85) {
-              newValue = dataOG.find((s) => s['country'] === selectedCountry)[key] * 0.85;
-          }
-          setSliderValues((prev) => ({
-              ...prev,
-              [selectedCountry]: {
-                  ...prev[selectedCountry],
-                  [key]: parseFloat(newValue).toFixed(2), // Convert to number
-              },
-          }));
-          (data.find((s) => s['country'] === selectedCountry))[key] = parseFloat(newValue);
-          let x = 0.002 * (data.find((s) => s['country'] === selectedCountry))['pce'] +
-            0.0015 * (data.find((s) => s['country'] === selectedCountry))['pce2'] +
-            0.0035 * (data.find((s) => s['country'] === selectedCountry))['pce3'] +
-            0.001 * (data.find((s) => s['country'] === selectedCountry))['milit.y'] +
-            0.002 * (data.find((s) => s['country'] === selectedCountry))['cold'] +
-            0.001;
-          (data.find((s) => s['country'] === selectedCountry))['prediction_prob'] = 1 / (1 + Math.pow(Math.E,-x));
-          setCountrySliders(prev => ({
-            ...prev,
-            [selectedCountry]: {
-              ...prev[selectedCountry],
-              [key]: (((data.find((s) => s['country'] === selectedCountry))[key] / (dataOG.find((s) => s['country'] === selectedCountry))[key] - 1) * 100).toFixed(0)
-            }
-          }));
-          console.log((data.find((s) => s['country'] === selectedCountry))[key]);
+      let rawValue = e.target.value.trim();
+      if (!isNaN(rawValue) && rawValue !== "") {
+        let newValue = parseFloat(rawValue);
+  
+        const countryData = data.find(s => s.country === selectedCountry);
+        const countryDataOG = dataOG.find(s => s.country === selectedCountry);
+  
+        if (!countryData || !countryDataOG) return;
+  
+        const originalValue = countryDataOG[key];
+  
+        // Clamp to ±15%
+        const maxVal = originalValue * 1.15;
+        const minVal = originalValue * 0.85;
+        newValue = Math.max(Math.min(newValue, maxVal), minVal);
+  
+        // Update raw value (for text input)
+        setSliderValues(prev => ({
+          ...prev,
+          [selectedCountry]: {
+            ...prev[selectedCountry],
+            [key]: newValue.toFixed(2),
+          },
+        }));
+  
+        // Update actual model data
+        countryData[key] = newValue;
+  
+        // Update prediction_prob using the formula
+        const pce      = countryData['pce'] ?? 0;
+        const pce2     = countryData['pce2'] ?? 0;
+        const pce3     = countryData['pce3'] ?? 0;
+        const military = countryData['milit.y'] ?? 0;
+        const cold     = countryData['cold'] ?? 0;
+  
+        const x = 0.003 * pce + 0.00015 * pce2 + 0.0000035 * pce3 + 0.5 * military + 0.2 * cold + 0.000001;
+        countryData['prediction_prob'] = 1 / (1 + Math.exp(-x));
+  
+        // Update % slider (derived from comparison to original)
+        const delta = originalValue !== 0
+          ? (((newValue / originalValue) - 1) * 100).toFixed(0)
+          : "N/A";
+  
+        setCountrySliders(prev => ({
+          ...prev,
+          [selectedCountry]: {
+            ...prev[selectedCountry],
+            [key]: delta,
+          },
+        }));
+  
+        console.log("Updated:", key, newValue, "Delta:", delta, "Prediction:", countryData['prediction_prob']);
       }
     }
   };
@@ -853,7 +875,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
                         fontWeight: "bold",
                       }}
                     >
-                      {country.prediction_prob.toFixed(2)}
+                      {country.prediction_prob?.toFixed?.(2) ?? "N/A"}
                     </div>
                   </div>
                 ))}
