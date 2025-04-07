@@ -15,8 +15,12 @@ const colorScale = (p) => {
   if (p === -1) {
     return "#505050";
   }
-  const red = 235 - Math.round(235 * p);
-  const green = 235 - Math.round(235 * p);
+
+  // Rescale p from [0, 0.5] → [0, 1]
+  const scaledP = Math.min(p / 0.03, 1); // cap at 1
+
+  const red = 235 - Math.round(235 * scaledP);
+  const green = 235 - Math.round(235 * scaledP);
   const blue = 235;
   return rgbToHex(red, green, blue);
 };
@@ -91,18 +95,35 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   const [months, setMonths] = useState(6);
 
   const defaultSliders = { 
-    "pce":0.0,
-    "pce2":0.0,
-    "pce3":0.0,
-    "milit.y":0.0,
-    "cold":0.0,
-    //"e_asia_pacific":0.0,
-    //"euro_cent_asia":0.0,
-    //"LA_carrib":0.0,
-    //"MENA":0.0,
-    //"N_america":0.0,
-    //"S_asia":0.0,
-    //"Sub_africa":0.0
+    "pce": 0,
+    "pce2": 0,
+    "pce3": 0,
+    "closed_autocracy": 0,
+    //"electoral_autocracy": 0,
+    //"electoral_democracy": 0,
+    "liberal_democracy": 0,
+    //"polyarchy": 0,
+    //"polyarchy2": 0,
+    "milit_dimension": 0,
+    "milreg": 0,
+    "lgdppcl": 0,
+    "ch_gdppcl": 0,
+    "cw": 0,
+    "mobilization": 1.239,
+    //"mobil_conc": 0.95,
+    "milex": 20.3403,
+    "milper": 7.2652,
+    "solqual": 2.4609,
+    "cold": 0,
+    "visit": 0,
+    //"e_asia_pacific": 0,
+    //"euro_cent_asia": 0,
+    //"LA_carrib": 0,
+    //"MENA": 0,
+    //"N_america": 1,
+    //"S_asia": 0,
+    //"Sub_africa": 0,
+    "ltrade": 15.3343,
   };
 
   // For the ranking panel (when no country is selected), allow collapse/expand.
@@ -233,15 +254,48 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   
       // Update the actual model data
       countryData[key] = updatedValue;
-  
+      
       // Calculate prediction
       const pce      = countryData['pce'] ?? 0;
       const pce2     = countryData['pce2'] ?? 0;
       const pce3     = countryData['pce3'] ?? 0;
-      const military = countryData['milit.y'] ?? 0;
+      const closed_autocracy = countryData['closed_autocracy'] ?? 0;
+      const liberal_democracy = countryData['liberal_democracy'] ?? 0;
+      const milit_dimension = countryData['milit_dimension'] ?? 0;
+      const milreg   = countryData['milreg'] ?? 0;
+      const lgdppcl  = countryData['lgdppcl'] ?? 0;
+      const ch_gdppcl = countryData['ch_gdppcl'] ?? 0;
+      const cw      = countryData['cw'] ?? 0;
+      const mobilization = countryData['mobilization'] ?? 0;
+      const milex   = countryData['milex'] ?? 0;
+      const milper   = countryData['milper'] ?? 0;
+      const solqual = countryData['solqual'] ?? 0;
       const cold     = countryData['cold'] ?? 0;
-  
-      const x = 0.003 * pce + 0.00015 * pce2 + 0.0000035 * pce3 + 0.5 * military + 0.2 * cold + 0.000001;
+      const visit   = countryData['visit'] ?? 0;
+      const ltrade  = countryData['ltrade'] ?? 0;
+
+      const intercept = -4.5896; 
+
+      const x = intercept +
+        -0.0079 * pce + 
+        0 * pce2 +
+        0 * pce3 +
+        -0.3355 * closed_autocracy +
+        -14.1022 * liberal_democracy +
+        0.5289 * milit_dimension +
+        1.1887 * milreg +
+        -0.0325 * lgdppcl +
+        -3.3183 * ch_gdppcl +
+        0.1013 * cw +
+        0.2772 * mobilization +
+        0.1166 * milex +
+        -0.2203 * milper +
+        -0.3020 * solqual +
+        0.4395 * cold +
+        0.2476 * visit +
+        -0.1317 * ltrade;
+
+
       countryData['prediction_prob'] = 1 / (1 + Math.exp(-x));
   
       // Set display state (slider value % and updated number)
