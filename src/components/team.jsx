@@ -36,7 +36,7 @@ const Team = () => {
     {
       name: "Kade Spaulding",
       role: "Mathematics",
-      image: "/images/catWaraMeme.jpg",
+      image: "/images/kade_picture.jpg",
       links: [
         { icon: "envelope", url: "mailto:kade.spaulding@uky.edu" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/kade-spaulding-908621236/" }
@@ -72,7 +72,7 @@ const Team = () => {
     {
       name: "Jose Sequeira",
       role: "Computer Science",
-      image: "/images/Jose_picture.png",
+      image: "/images/Jose_Picture.png",
       links: [
         { icon: "envelope", url: "mailto:jsequeirasanchez@gmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/josequeira/" }
@@ -81,7 +81,7 @@ const Team = () => {
     {
       name: "Morgan Blakenship",
       role: "Media Arts and Studies | Political Science",
-      image: "/images/Morgan_picture.png",
+      image: "/images/Morgan_picture.jpeg",
       links: [
         { icon: "envelope", url: "mailto:morgan.blakenship@uky.edu" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/morgan-blankenship-653740226/" }
@@ -130,7 +130,7 @@ const Team = () => {
     {
       name: "Jose Sequeira",
       role: "Computer Science",
-      image: "/images/Jose_picture.png",
+      image: "/images/Jose_Picture.png",
       links: [
         { icon: "envelope", url: "mailto:jsequeirasanchez@gmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/josequeira/" }
