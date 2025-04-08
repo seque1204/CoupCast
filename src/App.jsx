@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Map from './components/Map';
-import CountryDataSearch from './CountryDataSearch';
+import CountryDataSearch from './CountrySearch';
 import Team from './components/team';
 import About from './components/About';
 import "./App.css";

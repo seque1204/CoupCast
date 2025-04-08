@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./CountryDataSearch.css";
+import "./CountrySearch.css";
 import { ClipLoader } from "react-spinners";
 
 function escapeRegExp(string) {
@@ -78,8 +78,8 @@ function CountryDataSearch({ onCountrySelect, clearSearchTrigger, onResetClearSe
         return sortDirection === "desc" ? -comp : comp;
       } else {
         const parseValue = (val) => {
-          const num = parseFloat(String(val).replace(/[^0-9.-]+/g, ""));
-          return isNaN(num) ? 0 : num;
+          const num = Number(val);
+          return isNaN(num) ? -1 : num;
         };
         const valA = parseValue(a[effectiveSortColumn]);
         const valB = parseValue(b[effectiveSortColumn]);

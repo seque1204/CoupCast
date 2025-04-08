@@ -109,11 +109,11 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
     "lgdppcl": 0,
     "ch_gdppcl": 0,
     "cw": 0,
-    "mobilization": 1.239,
+    "mobilization": 0,
     //"mobil_conc": 0.95,
-    "milex": 20.3403,
-    "milper": 7.2652,
-    "solqual": 2.4609,
+    "milex": 0,
+    "milper": 0,
+    "solqual": 0,
     "cold": 0,
     "visit": 0,
     //"e_asia_pacific": 0,
@@ -123,7 +123,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
     //"N_america": 1,
     //"S_asia": 0,
     //"Sub_africa": 0,
-    "ltrade": 15.3343,
+    "ltrade": 0,
   };
 
   // For the ranking panel (when no country is selected), allow collapse/expand.
@@ -166,8 +166,10 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   
       fetchData();
     }}, []);
-  const rankingCountries = [...data].sort((a, b) => b.prediction_prob - a.prediction_prob);
-
+    const rankingCountries = [...data].sort((a, b) =>
+      (isNaN(b.prediction_prob) ? -1 : b.prediction_prob) -
+      (isNaN(a.prediction_prob) ? -1 : a.prediction_prob)
+    );
   // Update view when externalSelectedCountry changes
   useEffect(() => {
     if (externalSelectedCountry) {
@@ -179,6 +181,25 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         setManualZoom(false);
         setTargetCenter(center);
         setTargetZoom(zoom);
+        if (!countrySliders[countryName]) {
+          setCountrySliders(prev => ({
+            ...prev,
+            [countryName]: defaultSliders
+          }));
+        }
+        //Initialize Slider Values
+        const countryData = data.find((s) => s['country'] === countryName);
+        if (!sliderValues[countryName] && countryData) {
+          setSliderValues(prev => ({
+            ...prev,
+            [countryName]: Object.keys(defaultSliders).reduce((acc, key) => {
+              acc[key] = (typeof countryData[key] === "number" && isFinite(countryData[key]))
+                ? countryData[key].toFixed(2)
+                : "";
+              return acc;
+            }, {})
+          }));
+        }
       }
     } else {
       setSelectedCountry(null);
@@ -295,7 +316,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         0.2476 * visit +
         -0.1317 * ltrade;
 
-
+      console.log("Original Probability:", countryData['prediction_prob']);
       countryData['prediction_prob'] = 1 / (1 + Math.exp(-x));
   
       // Set display state (slider value % and updated number)
@@ -929,7 +950,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
                         fontWeight: "bold",
                       }}
                     >
-                      {country.prediction_prob?.toFixed?.(2) ?? "N/A"}
+                      {country.prediction_prob?.toFixed?.(4) ?? "N/A"}
                     </div>
                   </div>
                 ))}
