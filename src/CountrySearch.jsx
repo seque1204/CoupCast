@@ -210,7 +210,7 @@ function CountryDataSearch({ onCountrySelect, clearSearchTrigger, onResetClearSe
   return (
     <div className="CountryDataSearch" style={{ maxWidth: "800px", margin: "0 auto", padding: "1rem" }}>
       <div style={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
-        <h1 style={{ marginRight: "1rem", fontSize: "1.5rem" }}>Country Data Search</h1>
+        <h1 style={{ marginRight: "1rem", fontSize: "1.5rem" }}>Country Search</h1>
         <div style={{ position: "relative", flexGrow: 1 }}>
           <input
             type="text"
