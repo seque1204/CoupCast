@@ -512,7 +512,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
               zoom={zoomLevel}
               minZoom={1.30}
               maxZoom={4.00}
-              translateExtent={[[137, 55], [906, 520]]}
+              translateExtent={[[137, 55], [986, 520]]}
               filterZoomEvent={(event) => event.type !== "wheel" || !locked}
               onMoveEnd={({ zoom, coordinates }) => {
                 setTargetZoom(zoom);
@@ -815,7 +815,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
             top: '10px',
             right: '10px',
             width: selectedCountry ? '400px' : (rankingPanelExpanded ? '400px' : '40px'),
-            height: selectedCountry ? '800px' : (rankingPanelExpanded ? '800px' : '40px'),
+            height: selectedCountry ? '685px' : (rankingPanelExpanded ? '685px' : '40px'),
             backgroundColor: 'rgba(255,255,255,0.9)',
             boxShadow: '2px 2px 5px rgba(0,0,0,0.3)',
             overflowY: 'auto',
@@ -974,6 +974,13 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
                   </div>
                 )
               )}
+
+              <button className="CountryWriteup" onClick={() => {
+                window.location.hash = `#Country?name=${encodeURIComponent(selectedCountry)}`;
+              }} style={{ marginTop: '20px', textAlign: 'center' }} >
+                View Country Writeup
+              </button>
+
             </>
           ) : (
             rankingPanelExpanded && (

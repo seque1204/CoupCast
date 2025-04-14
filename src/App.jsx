@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Map from './components/Map';
 import CountryDataSearch from './CountrySearch';
+import CountryWriteup from './components/CountryWriteup';
 import Team from './components/team';
 import About from './components/About';
 import "./App.css";
@@ -15,10 +16,15 @@ const App = () => {
     const handleHashChange = () => {
       const newHash = window.location.hash || '#Map';
       setCurrentPage(newHash);
-      
+
       // Clear country selection when switching pages
       if (newHash !== '#Map') {
         setSelectedCountry(null);
+      }
+
+      if (newHash !== '#Country') {
+        setSelectedCountry(null);
+        clearSearch();
       }
     };
 
@@ -48,10 +54,11 @@ const App = () => {
         <nav>
           <ul>
             <li><a href="#Map">Map</a></li>
+            <li><a href="#Country">Country Pages</a></li>
             <li><a href="#About">About</a></li>
             <li><a href="#TeamInfo">Team Info</a></li>
             <li>
-              <a 
+              <a
                 href="https://tek.uky.edu/"  // Replace with your actual TEK URL
                 target="_blank"
                 rel="noopener noreferrer"
@@ -68,17 +75,28 @@ const App = () => {
       ) : currentPage === '#About' ? (
         // If current page is #About, show the About component
         <About />
-      ) : (
-        // If current page is not #TeamInfo, show the Map and CountryDataSearch components
+      ) : currentPage.startsWith('#Country') ? (
+        // If current page is #Country, show the Country Writeup component
         <>
-          <CountryDataSearch 
-            onCountrySelect={setSelectedCountry} 
+          <CountryDataSearch
+            onCountrySelect={setSelectedCountry}
             clearSearchTrigger={clearSearchTrigger}
             onResetClearSearch={() => setClearSearchTrigger(false)}
           />
-          <Map externalSelectedCountry={selectedCountry} onClearSearch={clearSearch} />
+          <CountryWriteup externalSelectedCountry={selectedCountry} onClearSearch={clearSearch} />
         </>
-      )}
+      ) : (
+          // If current page is not #TeamInfo, show the Map and CountryDataSearch components
+          <>
+            <CountryDataSearch
+              onCountrySelect={setSelectedCountry}
+              clearSearchTrigger={clearSearchTrigger}
+              onResetClearSearch={() => setClearSearchTrigger(false)}
+            />
+            <Map externalSelectedCountry={selectedCountry} onClearSearch={clearSearch} />
+          </>
+        )}
+        <div className="footer"></div>
     </div>
   );
 };

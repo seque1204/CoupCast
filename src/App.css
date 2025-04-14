@@ -17,6 +17,18 @@
   border-bottom: 3px solid #FFD700; /* Adds a cool gold accent line */
 }
 
+.footer {
+  width: 100%;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Ensures space between logo and nav */
+  padding: 15px 30px;
+  background: #0033A0;/* solid blue background */
+  border-top: 3px solid #FFD700; /* Adds a cool gold accent line */
+  margin-top: 40px;
+}
+
 .logo-container {
   display: flex;
   align-items: center;
