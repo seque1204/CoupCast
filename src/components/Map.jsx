@@ -92,7 +92,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   const [sliderValues, setSliderValues] = useState({});
   const [scoredState, setScoredState] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [months, setMonths] = useState(6);
+  const [months, setMonths] = useState(18);
   const [showInstructions, setShowInstructions] = useState(true);
   const [maxPredictionProb, setMaxPredictionProb] = useState(0.05); // Set a default max probability of 0.05
 
@@ -101,36 +101,24 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
     setShowInstructions(prev => !prev);
   };
 
-  const defaultSliders = {
+  const defaultSliders = {   //Sorted by weight in prediction
+    "liberal_democracy": 0,
+    "ch_gdppcl": 0,
+    "milreg": 0,
+    "cold": 0,
+    "closed_autocracy": 0,
+    "solqual": 0,
+    "mobilization": 0,
+    "visit": 0,
+    "milper": 0,
+    "milex": 0,
+    "cw": 0,
+    "ltrade": 0,
+    "lgdppcl": 0,
     "pce": 0,
     "pce2": 0,
     "pce3": 0,
-    "closed_autocracy": 0,
-    //"electoral_autocracy": 0,
-    //"electoral_democracy": 0,
-    "liberal_democracy": 0,
-    //"polyarchy": 0,
-    //"polyarchy2": 0,
     "milit_dimension": 0,
-    "milreg": 0,
-    "lgdppcl": 0,
-    "ch_gdppcl": 0,
-    "cw": 0,
-    "mobilization": 0,
-    //"mobil_conc": 0.95,
-    "milex": 0,
-    "milper": 0,
-    "solqual": 0,
-    "cold": 0,
-    "visit": 0,
-    //"e_asia_pacific": 0,
-    //"euro_cent_asia": 0,
-    //"LA_carrib": 0,
-    //"MENA": 0,
-    //"N_america": 1,
-    //"S_asia": 0,
-    //"Sub_africa": 0,
-    "ltrade": 0,
   };
 
   // For the ranking panel (when no country is selected), allow collapse/expand.
@@ -653,15 +641,15 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
           >
             <h3 style={{ margin: '0 0 15px 0', fontSize: '1.5rem' }}>Instructions</h3>
             <p style={{ fontSize: '1.0rem', lineHeight: '2' }}>
-              - <strong>Click</strong> or <strong>Search</strong> a country to view its details and risk rating.<br />
               - <strong>Hover</strong> over a country to see its name.<br />
-              - <strong>Use the sliders</strong> to adjust parameters and see how they affect the prediction in <strong>real-time</strong>.<br />
-              - <strong>Toggle predictive mode</strong> to switch between predictive and overall indicators.<br />
               - <strong>Zoom in/out</strong> using the "+" and "-" buttons on the left.<br />
-              - <strong>Reset the map</strong> using the reset button to restore default values.<br />
               - <strong>Locked/Unlocked mode</strong>: Toggle the lock button to enable or disable gesture-based zoom.<br />
+              - <strong>Click</strong> or <strong>Search</strong> a country to view its details and risk rating.<br />
+              - <strong>Toggle modes</strong> at the top of the pannel to switch between predictive and overall indicators.<br />
+              - <strong>Use the sliders</strong> to adjust parameters and see how they affect the prediction in <strong>real-time</strong>.<br />
               - <strong>Ranking Panel</strong>: Expand or collapse the ranking panel on the right to view country rankings.<br />
               - <strong>Risk Gradient</strong>: Use the gradient bar at the top-left to interpret risk levels (low to high).<br />
+              - <strong>Reset the map</strong> using the reset button to restore default values.<br />
             </p>
             <button
               style={{
