@@ -26,8 +26,6 @@ const colorScale = (p, maxProb) => {
 };
 
 const getRiskColor = (value) => {
-  // Low risk: light gray (#EBEBEB)
-  // High risk: red (#FF0000)
   const low = { r: 235, g: 235, b: 235 };
   const high = { r: 255, g: 0, b: 0 };
 
@@ -107,7 +105,6 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
     "milreg": 0,
     "cold": 0,
     "closed_autocracy": 0,
-    "solqual": 0,
     "mobilization": 0,
     "visit": 0,
     "milper": 0,
@@ -299,7 +296,6 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
       const mobilization = countryData['mobilization'] ?? 0;
       const milex = countryData['milex'] ?? 0;
       const milper = countryData['milper'] ?? 0;
-      const solqual = countryData['solqual'] ?? 0;
       const cold = countryData['cold'] ?? 0;
       const visit = countryData['visit'] ?? 0;
       const ltrade = countryData['ltrade'] ?? 0;
@@ -320,7 +316,6 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         0.2772 * mobilization +
         0.1166 * milex +
         -0.2203 * milper +
-        -0.3020 * solqual +
         0.4395 * cold +
         0.2476 * visit +
         -0.1317 * ltrade;
