@@ -2,25 +2,11 @@ import React, { useEffect, useState } from "react";
 
 const RotateWarning = () => {
   const [shouldShowOverlay, setShouldShowOverlay] = useState(false);
-  const [message, setMessage] = useState("");
 
   const checkIfShouldShow = () => {
     const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     const isPortrait = window.matchMedia("(orientation: portrait)").matches;
-
-    const zoomRatio = window.innerWidth / window.outerWidth;
-    const isZoomedIn = zoomRatio < 0.95; // Tweak threshold if needed
-
-    if (isMobile && isPortrait) {
-      setShouldShowOverlay(true);
-      setMessage("Please rotate your device to landscape mode");
-    } else if (isMobile && isZoomedIn) {
-      setShouldShowOverlay(true);
-      setMessage("Please zoom out your browser for the best experience");
-    } else {
-      setShouldShowOverlay(false);
-      setMessage("");
-    }
+    setShouldShowOverlay(isMobile && isPortrait);
   };
 
   useEffect(() => {
@@ -58,9 +44,11 @@ const RotateWarning = () => {
         marginBottom: "1rem",
         animation: "bounce 2s infinite"
       }}>
-        🔍
+        📱
       </div>
-      <h2 style={{ fontSize: "1.5rem", maxWidth: "300px" }}>{message}</h2>
+      <h2 style={{ fontSize: "1.5rem", maxWidth: "300px" }}>
+        Please rotate your device to landscape mode
+      </h2>
 
       <style>
         {`
