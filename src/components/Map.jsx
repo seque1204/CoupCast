@@ -100,22 +100,14 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   };
 
   const defaultSliders = {   //Sorted by weight in prediction
-    "liberal_democracy": 0,
-    "ch_gdppcl": 0,
-    "milreg": 0,
-    "cold": 0,
-    "closed_autocracy": 0,
-    "mobilization": 0,
-    "visit": 0,
-    "milper": 0,
-    "milex": 0,
-    "cw": 0,
-    "ltrade": 0,
-    "lgdppcl": 0,
-    "pce": 0,
-    "pce2": 0,
-    "pce3": 0,
-    "milit_dimension": 0,
+    "Trade": 0,
+    "Change_GDP_per_cap": 0,
+    "Democracy_level": 0,
+    "Women_political_participation": 0,
+    "Protests": 0,
+    "Military_regime": 0,
+    "Military_influence"  : 0,
+
   };
 
   // For the ranking panel (when no country is selected), allow collapse/expand.
@@ -283,43 +275,51 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
       countryData[key] = updatedValue;
 
       // Calculate prediction
+      const Trade = countryData['Trade'] ?? 0;
+      const Change_GDP_per_cap  = countryData['Change_GDP_per_cap'] ?? 0;
+      const Democracy_level  = countryData['Democracy_level'] ?? 0;
+      const Women_political_participation  = countryData['Women_political_participation'] ?? 0;
+      const Protests  = countryData['Protests'] ?? 0;
+      const Military_regime  = countryData['Military_regime'] ?? 0;
+      const Military_influence  = countryData['Military_influence'] ?? 0;
+
+      // Not on sliders but need to stay constant 
+      const Cold_war = countryData['Cold_war'] ?? 0;
+      const e_asia_pacific = countryData['e_asia_pacific'] ?? 0;
+      const LA_carrib = countryData['LA_carrib'] ?? 0;
+      const MENA = countryData['MENA'] ?? 0;
+      const N_america = countryData['N_america'] ?? 0;
+      const S_asia = countryData['S_asia'] ?? 0;
+      const Sub_africa = countryData['Sub_africa'] ?? 0;
       const pce = countryData['pce'] ?? 0;
       const pce2 = countryData['pce2'] ?? 0;
       const pce3 = countryData['pce3'] ?? 0;
-      const closed_autocracy = countryData['closed_autocracy'] ?? 0;
-      const liberal_democracy = countryData['liberal_democracy'] ?? 0;
-      const milit_dimension = countryData['milit_dimension'] ?? 0;
-      const milreg = countryData['milreg'] ?? 0;
-      const lgdppcl = countryData['lgdppcl'] ?? 0;
-      const ch_gdppcl = countryData['ch_gdppcl'] ?? 0;
-      const cw = countryData['cw'] ?? 0;
-      const mobilization = countryData['mobilization'] ?? 0;
-      const milex = countryData['milex'] ?? 0;
-      const milper = countryData['milper'] ?? 0;
-      const cold = countryData['cold'] ?? 0;
-      const visit = countryData['visit'] ?? 0;
-      const ltrade = countryData['ltrade'] ?? 0;
-
-      const intercept = -4.5896;
+      const Democracy_squared = countryData['Democracy_squared'] ?? 0;
+      const GDP_per_cap = countryData['GDP_per_cap'] ?? 0;
+      const Civil_wars = countryData['Civil_wars'] ?? 0;
+      const intercept = -6.607;
 
       const x = intercept +
-        -0.0079 * pce +
-        0 * pce2 +
-        0 * pce3 +
-        -0.3355 * closed_autocracy +
-        -14.1022 * liberal_democracy +
-        0.5289 * milit_dimension +
-        1.1887 * milreg +
-        -0.0325 * lgdppcl +
-        -3.3183 * ch_gdppcl +
-        0.1013 * cw +
-        0.2772 * mobilization +
-        0.1166 * milex +
-        -0.2203 * milper +
-        0.4395 * cold +
-        0.2476 * visit +
-        -0.1317 * ltrade;
-
+        -7.367e-2 * Trade +
+        -3.559e0 * Change_GDP_per_cap +
+        7.9264e0 * Democracy_level +
+        -9.8963e-1 * Women_political_participation +
+        2.5498e-1 * Protests +
+        1.2107e0 * Military_regime +
+        8.7481e-1 * Military_influence + //After this is just other ones not on slider
+        4.5741e-1 * Cold_war +
+        2.3207e-1 * e_asia_pacific +
+        8.2664e-1 * LA_carrib +
+        7.1901e-1 * MENA +
+        -1.1423e1 * N_america +
+        4.1404e-1 * S_asia +
+        7.9359e-1 * Sub_africa +
+        -5.7242e-3 * pce +
+        1.0202e-5 * pce2 +
+        -9.6800e-9 * pce3 +
+        -8.5157e0 * Democracy_squared +
+        -1.104e-1 * GDP_per_cap +
+        2.4043e-1 * Civil_wars
       console.log("Original Probability:", countryData['prediction_prob']);
       countryData['prediction_prob'] = 1 / (1 + Math.exp(-x));
 
