@@ -72,7 +72,7 @@ const Team = () => {
     {
       name: "Jose Sequeira",
       role: "Computer Science",
-      image: "/images/Jose_Picture.png",
+      image: "/images/JoseSequeira.jpg",
       links: [
         { icon: "envelope", url: "mailto:jsequeirasanchez@gmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/josequeira/" }
@@ -130,7 +130,7 @@ const Team = () => {
     {
       name: "Jose Sequeira",
       role: "Computer Science",
-      image: "/images/Jose_Picture.png",
+      image: "/images/JoseSequeira.jpg",
       links: [
         { icon: "envelope", url: "mailto:jsequeirasanchez@gmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/josequeira/" }
