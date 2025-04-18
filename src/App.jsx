@@ -4,6 +4,8 @@ import CountryDataSearch from './CountrySearch';
 import CountryWriteup from './components/CountryWriteup';
 import Team from './components/team';
 import About from './components/About';
+import RotateWarning from './components/RotateWarning';
+import ZoomWrapper from './components/ZoomWrapper';
 import "./App.css";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -43,49 +45,51 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className="header">
-        <div className="logo-container">
-          <img src="/logo-uk.png" alt="Logo" className="logo" />
+      <RotateWarning />
+      <ZoomWrapper baseWidth={1200}>
+        <div className="header">
+          <div className="logo-container">
+            <img src="/logo-uk.png" alt="Logo" className="logo" />
+          </div>
+          <div className="text-container">
+            <span className="top-text">University of Kentucky</span>
+            <span className="bottom-text">Department of Political Science</span>
+          </div>
+          <nav>
+            <ul>
+              <li><a href="#Map">Map</a></li>
+              <li><a href="#Country">Country Pages</a></li>
+              <li><a href="#About">About</a></li>
+              <li><a href="#TeamInfo">Team Info</a></li>
+              <li>
+                <a
+                  href="https://tek.uky.edu/"  // Replace with your actual TEK URL
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  About TEK
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
-        <div className="text-container">
-          <span className="top-text">University of Kentucky</span>
-          <span className="bottom-text">Department of Political Science</span>
-        </div>
-        <nav>
-          <ul>
-            <li><a href="#Map">Map</a></li>
-            <li><a href="#Country">Country Pages</a></li>
-            <li><a href="#About">About</a></li>
-            <li><a href="#TeamInfo">Team Info</a></li>
-            <li>
-              <a
-                href="https://tek.uky.edu/"  // Replace with your actual TEK URL
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                About TEK
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      {/* If current page is #TeamInfo, show the Team component */}
-      {currentPage === '#TeamInfo' ? (
-        <Team />
-      ) : currentPage === '#About' ? (
-        // If current page is #About, show the About component
-        <About />
-      ) : currentPage.startsWith('#Country') ? (
-        // If current page is #Country, show the Country Writeup component
-        <>
-          <CountryDataSearch
-            onCountrySelect={setSelectedCountry}
-            clearSearchTrigger={clearSearchTrigger}
-            onResetClearSearch={() => setClearSearchTrigger(false)}
-          />
-          <CountryWriteup externalSelectedCountry={selectedCountry} onClearSearch={clearSearch} />
-        </>
-      ) : (
+        {/* If current page is #TeamInfo, show the Team component */}
+        {currentPage === '#TeamInfo' ? (
+          <Team />
+        ) : currentPage === '#About' ? (
+          // If current page is #About, show the About component
+          <About />
+        ) : currentPage.startsWith('#Country') ? (
+          // If current page is #Country, show the Country Writeup component
+          <>
+            <CountryDataSearch
+              onCountrySelect={setSelectedCountry}
+              clearSearchTrigger={clearSearchTrigger}
+              onResetClearSearch={() => setClearSearchTrigger(false)}
+            />
+            <CountryWriteup externalSelectedCountry={selectedCountry} onClearSearch={clearSearch} />
+          </>
+        ) : (
           // If current page is not #TeamInfo, show the Map and CountryDataSearch components
           <>
             <CountryDataSearch
@@ -97,6 +101,7 @@ const App = () => {
           </>
         )}
         <div className="footer"></div>
+      </ZoomWrapper>
     </div>
   );
 };
