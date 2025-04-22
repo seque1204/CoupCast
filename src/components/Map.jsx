@@ -438,6 +438,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
     setCountrySliders({}); // Clear country-specific sliders
   };
 
+  
   // Smooth zoom animation
   useEffect(() => {
     if (manualZoom) return;
@@ -508,7 +509,9 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
               minZoom={1.30}
               maxZoom={4.00}
               translateExtent={[[137, 55], [986, 520]]}
-              filterZoomEvent={(event) => event.type !== "wheel" || !locked}
+              filterZoomEvent={(event) => {
+                event.type !== "wheel" || event.type.startsWith('touch') || !locked
+              }}
               onMoveEnd={({ zoom, coordinates }) => {
                 setTargetZoom(zoom);
                 setZoomLevel(zoom);
@@ -603,7 +606,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         <button
           style={{
             position: 'absolute',
-            top: '100px',
+            top: '200px',
             left: '10px',
             width: '40px',
             height: '40px',
@@ -668,7 +671,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         <div
           style={{
             position: 'absolute',
-            top: '150px',
+            top: '250px',
             left: '10px',
             width: '40px',
             height: '40px',
@@ -704,7 +707,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         <div
           style={{
             position: 'absolute',
-            top: '200px',
+            top: '300px',
             left: '10px',
             width: '40px',
             height: '40px',
@@ -740,7 +743,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         <div
           style={{
             position: 'absolute',
-            top: '250px',
+            top: '350px',
             left: '10px',
             width: '40px',
             height: '40px',
@@ -771,7 +774,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         <div
           style={{
             position: 'absolute',
-            top: '300px',
+            top: '400px',
             left: '10px',
             width: '40px',
             height: '40px',
@@ -815,7 +818,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
             boxShadow: '2px 2px 5px rgba(0,0,0,0.3)',
             overflowY: 'auto',
             transition: 'width 0.3s ease, height 0.3s ease, transform 0.3s ease',
-            zIndex: 1000,
+            zIndex: 999,
           }}
         >
           {/* Render the toggle arrow only when no country is selected */}
