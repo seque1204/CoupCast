@@ -603,7 +603,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         <button
           style={{
             position: 'absolute',
-            top: '280px',
+            top: '100px',
             left: '10px',
             width: '40px',
             height: '40px',
@@ -668,7 +668,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         <div
           style={{
             position: 'absolute',
-            top: '330px',
+            top: '150px',
             left: '10px',
             width: '40px',
             height: '40px',
@@ -704,7 +704,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         <div
           style={{
             position: 'absolute',
-            top: '380px',
+            top: '200px',
             left: '10px',
             width: '40px',
             height: '40px',
@@ -740,7 +740,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         <div
           style={{
             position: 'absolute',
-            top: '430px',
+            top: '250px',
             left: '10px',
             width: '40px',
             height: '40px',
@@ -771,7 +771,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         <div
           style={{
             position: 'absolute',
-            top: '480px',
+            top: '300px',
             left: '10px',
             width: '40px',
             height: '40px',
