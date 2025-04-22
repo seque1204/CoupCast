@@ -20,12 +20,14 @@ function CountryDataSearch({ onCountrySelect, clearSearchTrigger, onResetClearSe
   const suggestionsRef = useRef([]);
 
   const sortOptions = [
-    { label: "Country (A-Z)", key: "country" }, /*
-    { label: "GDP per Capita", key: "GDP per Capita" },
-    { label: "Economic Growth Rate", key: "Economic Growth Rate" },
-    { label: "Military Expenditure % GDP", key: "Military Expenditure % GDP" },
-    { label: "Fraction of Military in Gov", key: "Fraction of Military in Gov" },
-    { label: "Ethnic Fractionalization", key: "Ethnic Fractionalization" }, */
+    { label: "Country (A-Z)", key: "country" }, 
+    { label: "Trade" , key: "Trade"},
+    { label: "% Change in GDP" , key: "Change_GDP_per_cap"},
+    { label: "Democracy Level" , key: "Democracy_level"},
+    { label: "Women Political Participation" , key: "Women_political_participation"},
+    { label: "Protests" , key: "Protests"},
+    { label: "Military Regime" , key: "Military_regime"},
+    { label: "Military Influence" , key: "Military_influence"},
     { label: "Prediction Probability", key: "prediction_prob" },
   ];
 
@@ -369,7 +371,7 @@ function CountryDataSearch({ onCountrySelect, clearSearchTrigger, onResetClearSe
                 backgroundColor: index === highlightedIndex ? "lightgray" : "#fff",
               }}
             >
-              {country.country}
+              {country.country} 
             </li>
           ))}
         </ul>
