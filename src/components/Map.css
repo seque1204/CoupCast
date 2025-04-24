@@ -11,8 +11,8 @@
 }
 
 .map-box {
-  width: 100%; /* Set the width of the box */
-  height: 100%; /* Set the height of the box */
+  width: 80%; /* Set the width of the box */
+  height: 80%; /* Set the height of the box */
   display: flex;
   position: relative;
   justify-content: center;

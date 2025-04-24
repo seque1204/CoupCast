@@ -58,7 +58,7 @@ const App = () => {
           <nav>
             <ul>
               <li><a href="#Map">Map</a></li>
-              <li><a href="#Country">Country Pages</a></li>
+              {/*<li><a href="#Country">Country Pages</a></li>*/}
               <li><a href="#About">About</a></li>
               <li><a href="#TeamInfo">Team Info</a></li>
               <li>
@@ -79,7 +79,7 @@ const App = () => {
         ) : currentPage === '#About' ? (
           // If current page is #About, show the About component
           <About />
-        ) : currentPage.startsWith('#Country') ? (
+        ) : /* currentPage.startsWith('#Country') ? (
           // If current page is #Country, show the Country Writeup component
           <>
             <CountryDataSearch
@@ -89,7 +89,7 @@ const App = () => {
             />
             <CountryWriteup externalSelectedCountry={selectedCountry} onClearSearch={clearSearch} />
           </>
-        ) : (
+        ) :*/ (
           // If current page is not #TeamInfo, show the Map and CountryDataSearch components
           <>
             <CountryDataSearch

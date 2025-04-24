@@ -9,15 +9,15 @@ const rgbToHex = (r, g, b) => {
   const toHex = (x) => x.toString(16).padStart(2, '0');
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
-
+let maxProbForScaling = -1; // Default max probability for scaling
 // Function to calculate color based on probability
 const colorScale = (p, maxProb) => {
   if (p === -1) {
     return "#505050";
   }
-
+  maxProbForScaling = maxProb + maxProb * 0.25; // Add 10% buffer for scaling
   // Rescale p from [0, maxProb] → [0, 1]
-  const scaledP = Math.min(p / maxProb, 1); // cap at 1
+  const scaledP = Math.min(p / maxProbForScaling, 1); // cap at 1
 
   const red = 235 - Math.round(235 * scaledP);
   const green = 235 - Math.round(235 * scaledP);
@@ -93,6 +93,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   const [months, setMonths] = useState(18);
   const [showInstructions, setShowInstructions] = useState(true);
   const [maxPredictionProb, setMaxPredictionProb] = useState(0.05); // Set a default max probability of 0.05
+  const [rankingPanelExpanded, setRankingPanelExpanded] = useState(false);
 
 
   const toggleInstructions = () => {
@@ -100,20 +101,18 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   };
 
   const defaultSliders = {   //Sorted by weight in prediction
-    "Trade": 0,
-    "Change_GDP_per_cap": 0,
-    "Democracy_level": 0,
-    "Women_political_participation": 0,
-    "Protests": 0,
+    "Trade": 100,
+    "Change_GDP_per_cap": 100,
+    "Democracy_level": 100,
+    "Women_political_participation": 100,
+    "Protests": 100,
     "Military_regime": 0,
-    "Military_influence"  : 0,
+    "Military_influence"  : 100,
 
   };
 
   // For the ranking panel (when no country is selected), allow collapse/expand.
   // Expanded by default.
-  const [rankingPanelExpanded, setRankingPanelExpanded] = useState(true);
-
   // Fetch data
   useEffect(() => {
     if (loading) {
@@ -205,7 +204,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
       console.log("Max Prediction Probability:", maxProb);
       setMaxPredictionProb(maxProb);
     }
-  }, [data]);
+  }, [dataOG]);
 
   const handleCountryClick = (geo) => {
     const countryName = geo.properties.name;
@@ -262,14 +261,19 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   };
 
   const handleSliderChange = (e, key) => {
-    const sliderVal = Number(e.target.value); // ensure it's a number
+    let sliderVal = Number(e.target.value); // ensure it's a number
 
+    if (key == "Military_regime") {
+      sliderVal = sliderVal === 0 ? 0 : 1; 
+    }
     const countryData = data.find((s) => s.country === selectedCountry);
     const countryDataOG = dataOG.find((s) => s.country === selectedCountry);
 
     if (selectedCountry && countryData && countryDataOG) {
       const originalValue = countryDataOG[key];
-      const updatedValue = originalValue * (1 + sliderVal / 100);
+      const updatedValue = key === "Military_regime"
+        ? sliderVal // Direct toggle value
+        : originalValue * (sliderVal / 100);
 
       // Update the actual model data
       countryData[key] = updatedValue;
@@ -369,8 +373,8 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
         const originalValue = countryDataOG[key];
 
         // Clamp to ±15%
-        const maxVal = originalValue * 1.15;
-        const minVal = originalValue * 0.85;
+        const maxVal = originalValue * 2;
+        const minVal = originalValue * 0;
         newValue = Math.max(Math.min(newValue, maxVal), minVal);
 
         // Update raw value (for text input)
@@ -384,20 +388,57 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
 
         // Update actual model data
         countryData[key] = newValue;
-
-        // Update prediction_prob using the formula
+        // Calculate prediction
+        const Trade = countryData['Trade'] ?? 0;
+        const Change_GDP_per_cap = countryData['Change_GDP_per_cap'] ?? 0;
+        const Democracy_level = countryData['Democracy_level'] ?? 0;
+        const Women_political_participation = countryData['Women_political_participation'] ?? 0;
+        const Protests = countryData['Protests'] ?? 0;
+        const Military_regime = countryData['Military_regime'] ?? 0;
+        const Military_influence = countryData['Military_influence'] ?? 0;
+        // Not on sliders but need to stay constant
+        const Cold_war = countryData['Cold_war'] ?? 0;
+        const e_asia_pacific = countryData['e_asia_pacific'] ?? 0;
+        const LA_carrib = countryData['LA_carrib'] ?? 0;
+        const MENA = countryData['MENA'] ?? 0;
+        const N_america = countryData['N_america'] ?? 0;
+        const S_asia = countryData['S_asia'] ?? 0;
+        const Sub_africa = countryData['Sub_africa'] ?? 0;
         const pce = countryData['pce'] ?? 0;
         const pce2 = countryData['pce2'] ?? 0;
         const pce3 = countryData['pce3'] ?? 0;
-        const military = countryData['milit.y'] ?? 0;
-        const cold = countryData['cold'] ?? 0;
-
-        const x = 0.003 * pce + 0.00015 * pce2 + 0.0000035 * pce3 + 0.5 * military + 0.2 * cold + 0.000001;
+        const Democracy_squared = countryData['Democracy_squared'] ?? 0;
+        const GDP_per_cap = countryData['GDP_per_cap'] ?? 0;
+        const Civil_wars = countryData['Civil_wars'] ?? 0;
+        const intercept = -6.607;
+ 
+        const x = intercept +
+          -7.367e-2 * Trade +
+          -3.559e0 * Change_GDP_per_cap +
+          7.9264e0 * Democracy_level +
+          -9.8963e-1 * Women_political_participation +
+          2.5498e-1 * Protests +
+          1.2107e0 * Military_regime +
+          8.7481e-1 * Military_influence + //After this is just other ones not on slider
+          4.5741e-1 * Cold_war +
+          2.3207e-1 * e_asia_pacific +
+          8.2664e-1 * LA_carrib +
+          7.1901e-1 * MENA +
+          -1.1423e1 * N_america +
+          4.1404e-1 * S_asia +
+          7.9359e-1 * Sub_africa +
+          -5.7242e-3 * pce +
+          1.0202e-5 * pce2 +
+          -9.6800e-9 * pce3 +
+          -8.5157e0 * Democracy_squared +
+          -1.104e-1 * GDP_per_cap +
+          2.4043e-1 * Civil_wars
+        console.log("Original Probability:", countryData['prediction_prob']);
         countryData['prediction_prob'] = 1 / (1 + Math.exp(-x));
 
         // Update % slider (derived from comparison to original)
         const delta = originalValue !== 0
-          ? (((newValue / originalValue) - 1) * 100).toFixed(0)
+          ? ((newValue / originalValue) * 100).toFixed(0)
           : "N/A";
 
         setCountrySliders(prev => ({
@@ -509,9 +550,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
               minZoom={1.30}
               maxZoom={4.00}
               translateExtent={[[137, 55], [986, 520]]}
-              filterZoomEvent={(event) => {
-                event.type !== "wheel" || event.type.startsWith('touch') || !locked
-              }}
+              filterZoomEvent={(event) => event.type !== "wheel" || event.type.startsWith('touch') || !locked}
               onMoveEnd={({ zoom, coordinates }) => {
                 setTargetZoom(zoom);
                 setZoomLevel(zoom);
@@ -660,7 +699,11 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
                 cursor: 'pointer',
                 fontSize: '1rem',
               }}
-              onClick={toggleInstructions}
+              onClick= {(event) => {
+                toggleInstructions();
+                setRankingPanelExpanded(true);
+                }}
+              
             >
               Close
             </button>
@@ -961,13 +1004,12 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
                         </label>
                         <input
                           type="range"
-                          min="-15"
-                          max="15"
-                          value={countrySliders[selectedCountry]?.[key] ?? 0}
+                          min={key === "Military_regime" ? "0" : "0"}
+                          max={key === "Military_regime" ? "1" : "200"}
+                          value={countrySliders[selectedCountry]?.[key] ?? 100}
                           onChange={(e) => handleSliderChange(e, key)}
                         />
-                        <span>{countrySliders[selectedCountry]?.[key] + "%" || 0}</span>
-                      </div>
+                        <span>{countrySliders[selectedCountry]?.[key]}{key !== "Military_regime" ? "%" : ""}</span>                      </div>
                     ))}
                   </div>
                 )
@@ -1063,8 +1105,8 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
       <div
         style={{
           position: 'absolute',
-          top: '20px',   // Change top and bottom for top/bottom left
-          left: '20px',
+          top: '3%',   // Change top and bottom for top/bottom left
+          left: '11%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',

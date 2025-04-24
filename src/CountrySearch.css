@@ -1,6 +1,6 @@
 .CountryDataSearch{
     overflow: hidden;
-    background-color: white;
+    background-color: rgb(228, 244, 247);
 }
 
 .button {
@@ -21,3 +21,4 @@
     border: 1px solid #ddd;
     cursor: pointer;
 }
+
