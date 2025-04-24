@@ -103,10 +103,10 @@ const Team = () => {
     {
       name: "Adrian Treadwell",
       role: "Computer Science",
-      image: "/images/catWaraMeme.jpg",
+      image: "/images/adriantreadwell.jpg",
       links: [
-        { icon: "envelope", url: "mailto:sarah@uky.edu" },
-        { icon: "linkedin", url: "#" }
+        { icon: "envelope", url: "mailto:astreadwell2@gmail.com" },
+        { icon: "linkedin", url: "https://www.linkedin.com/in/astreadwell/" }
       ]
     },
     {
