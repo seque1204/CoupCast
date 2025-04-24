@@ -31,12 +31,13 @@
   position: relative;
   right: 0;
   top: 0;
+  bottom: 0;
   width: 250px;
   height: 750px;
   background-color: rgba(255, 255, 255, 0.7);;
   border-radius: 10px;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-  padding: 20px;
+  padding: 0 20px 20px;
   transform: translateX(200%);
   transition: transform 0.3s ease-in-out;
 
@@ -185,4 +186,30 @@ input:checked + .slider:before {
 
 .slider-item {
   margin-bottom: 1rem;
+}
+
+/* Sticky container for toggle, title, risk headers */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fff;        /* ← use a solid white instead of a semi‑transparent one */
+  padding-top: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+
+/* spacing for country title inside sticky */
+.sticky-header h1 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* risk header styling */
+.risk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
 }

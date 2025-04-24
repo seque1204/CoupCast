@@ -885,6 +885,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
           )}
           {selectedCountry ? (
             <>
+              <div className="sticky-header">
               <button className="close-btn" onClick={() => {
                 setSelectedCountry(null);
                 setManualZoom(false);
@@ -904,20 +905,18 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
               </label>
 
               <h1>{selectedCountry}</h1>
-              <h2 style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", paddingTop: "10px", paddingBottom: "12px" }}>
-                <div style={{ fontSize: "1.2rem", fontWeight: "500" }}>
-                  Risk Rating:
-                </div>
+              <h2 className="risk-header">
+                <div> Risk Rating:</div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   <CircleProgress value={prob} />
-                  <span style={{ fontSize: "1.2rem", fontWeight: "500", width: "60px", textAlign: "right" }}>
+                  <span>
                     {prob !== "N/A" ? (prob * 100).toFixed(0) + "%" : "N/A"}
                   </span>
                 </div>
               </h2>
-
-              <h2 style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", paddingBottom: "12px" }}>
-                <div style={{ fontSize: "1.2rem", fontWeight: "500" }}>
+              
+              <h2 className = "risk-header">
+                <div>
                   Risk in{" "}
                   <select
                     value={months}
@@ -941,11 +940,12 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   <CircleProgress value={probX} />
-                  <span style={{ fontSize: "1.2rem", fontWeight: "500", width: "60px", textAlign: "right" }}>
+                  <span>
                     {probX !== "N/A" ? (probX * 100).toFixed(0) + "%" : "N/A"}
                   </span>
                 </div>
               </h2>
+              </div>
               {selectedCountry && (
                 !scoredState ? (
 
