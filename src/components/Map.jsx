@@ -10,20 +10,37 @@ const rgbToHex = (r, g, b) => {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 let maxProbForScaling = -1; // Default max probability for scaling
+
 // Function to calculate color based on probability
 const colorScale = (p, maxProb) => {
   if (p === -1) {
-    return "#505050";
+    return "#cfcccc";
   }
-  maxProbForScaling = maxProb + maxProb * 0.25; // Add 10% buffer for scaling
-  // Rescale p from [0, maxProb] → [0, 1]
-  const scaledP = Math.min(p / maxProbForScaling, 1); // cap at 1
+  // check if p is a number and not NaN
+  if (isNaN(p) || p === null || p === undefined) {
+    return "#cfcccc"; // Default color for invalid probability
+  }
+  // Add a buffer (say 25%)
+  maxProbForScaling = maxProb + maxProb * 0.5;
 
+  // Set k for logarithmic scaling (bigger = stronger boost to small values)
+  const k = 100; // you can tweak between 50-200 depending on how aggressive you want
+
+  // Apply logarithmic scaling
+  const numerator = Math.log(1 + k * p);
+  const denominator = Math.log(1 + k * maxProbForScaling);
+  let scaledP = numerator / denominator;
+
+  // Cap at 1 to be safe
+  scaledP = Math.min(scaledP, 1);
+
+  // Now color based on scaledP
   const red = 235 - Math.round(235 * scaledP);
   const green = 235 - Math.round(235 * scaledP);
   const blue = 235;
   return rgbToHex(red, green, blue);
 };
+
 
 const getRiskColor = (value) => {
   const low = { r: 235, g: 235, b: 235 };
@@ -105,6 +122,7 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
     "Women_political_participation": 100,
     "Protests": 100,
     "Military_regime": 0,
+    "Military_influence": 100,
     "Military_influence": 100,
 
   };
@@ -654,11 +672,18 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
             boxShadow: '2px 2px 5px rgba(0,0,0,0.3)',
             cursor: 'pointer',
             zIndex: 1000,
+            display: 'flex',        
+            alignItems: 'center',   
+            justifyContent: 'center', 
+            fontWeight: 'bold',     
+            fontSize: '0.7rem',    
+            color: '#000',          
+            userSelect: 'none',     
           }}
           onClick={toggleInstructions}
           aria-label="Help"
         >
-          ?
+          User Guide
         </button>
 
         { /* instructions pop up */}
@@ -681,7 +706,7 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
             <p style={{ fontSize: '1.0rem', lineHeight: '2' }}>
               - <strong>Hover</strong> over a country to see its name.<br />
               - <strong>Zoom in/out</strong> using the "+" and "-" buttons on the left.<br />
-              - <strong>Locked/Unlocked mode</strong>: Toggle the lock button to enable or disable gesture-based zoom.<br />
+              - <strong>Locked/Unlocked mode</strong>: Toggle the zoom on/off button to enable or disable gesture-based zoom.<br />
               - <strong>Click</strong> or <strong>Search</strong> a country to view its details and risk rating.<br />
               - <strong>Toggle modes</strong> at the top of the pannel to switch between predictive and overall indicators.<br />
               - <strong>Use the sliders</strong> to adjust parameters and see how they affect the prediction in <strong>real-time</strong>.<br />
@@ -811,7 +836,7 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
               userSelect: 'none',
             }}
           >
-            {locked ? "Zoom\nLocked" : "Zoom\nUnlocked"}
+            {locked ? "Scroll Zoom ON" : "Scroll Zoom OFF"}
           </div>
         </div>
 
@@ -845,7 +870,7 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
               userSelect: 'none',
             }}
           >
-            Reset
+            Reset Map
           </div>
         </div>
 
@@ -911,7 +936,7 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <CircleProgress value={prob} />
                     <span>
-                      {prob !== "N/A" ? (prob * 100).toFixed(0) + "%" : "N/A"}
+                      {prob !== "N/A" ? (prob * 100).toFixed(2) + "%" : "N/A"}
                     </span>
                   </div>
                 </h2>
@@ -942,7 +967,7 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <CircleProgress value={probX} />
                     <span>
-                      {probX !== "N/A" ? (probX * 100).toFixed(0) + "%" : "N/A"}
+                      {probX !== "N/A" ? (probX * 100).toFixed(2) + "%" : "N/A"}
                     </span>
                   </div>
                 </h2>
@@ -1019,7 +1044,7 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
               <button className="CountryWriteup" onClick={() => {
                 window.location.hash = `#Country?name=${encodeURIComponent(selectedCountry)}`;
               }} style={{ marginTop: '20px', textAlign: 'center' }} >
-                View Country Writeup
+                {/*View Country Writeup*/}
               </button>
 
             </>
@@ -1099,6 +1124,18 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
           zIndex: 1000,
         }}
       >
+        {/* Title */}
+        <h3
+          style={{
+            margin: '0 0 10px 0',
+            fontSize: '0.8rem',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            color: '#333',
+          }}
+        >
+          Current Risk
+        </h3>
         {/* Gradient Bar with No Data Section */}
         <div
           style={{
@@ -1111,7 +1148,7 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
           }}
         >
           {/* No Data Section */}
-          <div style={{ width: '30px', backgroundColor: '#505050' }}></div>
+          <div style={{ width: '30px', backgroundColor: '#cfcccc' }}></div>
           {/* Gradient Section */}
           <div style={{ flex: 1, background: 'linear-gradient(to right, #EBEBEB, #00008B)' }}></div>
         </div>

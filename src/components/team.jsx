@@ -29,7 +29,7 @@ const Team = () => {
       role: "Economics",
       image: "/images/Leah_Picture.png",
       links: [
-        { icon: "envelope", url: "mailto:leah.smith@uky.edu" },
+        { icon: "envelope", url: "mailto:leah-smith22@outlook.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/leah-smith-53175b359/" }
       ]
     },
@@ -38,7 +38,7 @@ const Team = () => {
       role: "Mathematics",
       image: "/images/kade_picture.jpg",
       links: [
-        { icon: "envelope", url: "mailto:kade.spaulding@uky.edu" },
+        { icon: "envelope", url: "mailto:kademarcus0908@gmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/kade-spaulding-908621236/" }
       ]
     },
@@ -47,16 +47,16 @@ const Team = () => {
       role: "Mathematics",
       image: "/images/Harrison_Picture.png",
       links: [
-        { icon: "envelope", url: "mailto:harrison.hill@uky.edu" },
+        { icon: "envelope", url: "mailto:harryhill304@gmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/harrison-c-hill/" }
       ]
     },
     {
       name: "Camila Pimentel",
-      role: "Political Sciece | International Studies",
+      role: "Political Science | International Studies",
       image: "/images/Camila_picture.png",
       links: [
-        { icon: "envelope", url: "mailto:camila.pimentel@uky.edu" },
+        { icon: "envelope", url: "mailto:camilatavarespimentel@gmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/camila-pimentel-053608207/" }
       ]
     },
@@ -65,7 +65,7 @@ const Team = () => {
       role: "Public Policy | Economics",
       image: "/images/PatriciaJuarbe.jpg",
       links: [
-        { icon: "envelope", url: "mailto:patricia.juarbe@uky.edu" },
+        { icon: "envelope", url: "mailto:patriciajuarbe6@gmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/particiajuarbe/" }
       ]
     },
@@ -79,11 +79,11 @@ const Team = () => {
       ]
     },
     {
-      name: "Morgan Blakenship",
+      name: "Morgan Blankenship",
       role: "Media Arts and Studies | Political Science",
       image: "/images/Morgan_picture.jpeg",
       links: [
-        { icon: "envelope", url: "mailto:morgan.blakenship@uky.edu" },
+        { icon: "envelope", url: "mailto: morganb20@hotmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/morgan-blankenship-653740226/" }
       ]
     },
@@ -92,7 +92,7 @@ const Team = () => {
       role: "Political Science",
       image: "/images/EmmaThyne.jpg",
       links: [
-        { icon: "envelope", url: "mailto:emma.thyne@uky.edu" },
+        { icon: "envelope", url: "mailto:emma.thyne@outlook.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/emma-thyne-462109205/" }
       ]
     }

@@ -42,12 +42,12 @@ const RotateWarning = () => {
       <div style={{
         fontSize: "3rem",
         marginBottom: "1rem",
-        animation: "bounce 2s infinite"
+        animation: "tilt 2s infinite"
       }}>
         📱
       </div>
       <h2 style={{ fontSize: "1.5rem", maxWidth: "300px" }}>
-        Please rotate your device to landscape mode
+        Please rotate your device to landscape mode for the best experience.
       </h2>
 
       <style>
@@ -65,7 +65,16 @@ const RotateWarning = () => {
               transform: translateY(-10px);
             }
           }
+
+        @keyframes tilt {
+          0% { transform: rotate(0deg); }
+          25% { transform: rotate(-10deg); }
+          50% { transform: rotate(0deg); }
+          75% { transform: rotate(10deg); }
+          100% { transform: rotate(0deg); }
+        }
         `}
+        
       </style>
     </div>
   );
