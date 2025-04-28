@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CanadaWriteup from './countryPages/CanadaWriteup';
 import DefaultWriteup from './countryPages/DefaultWriteup';
+import BurkinaFasoWriteup from './countryPages/BurkinaFasoWriteup';
 
 const CountryWriteup = ({ externalSelectedCountry, onClearSearch }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -34,6 +35,8 @@ const CountryWriteup = ({ externalSelectedCountry, onClearSearch }) => {
     switch (selectedCountry) {
       case 'Canada':
         return <CanadaWriteup />;
+      case 'Burkina Faso':
+        return <BurkinaFasoWriteup />;
       case null:
         return <DefaultWriteup />;
       default:

@@ -13,6 +13,9 @@ const App = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [clearSearchTrigger, setClearSearchTrigger] = useState(false);
   const [currentPage, setCurrentPage] = useState(window.location.hash || '#Map');
+  const [hoveredCountry, setHoveredCountry] = useState(null);
+  const [labelPosition, setLabelPosition] = useState({ x: 0, y: 0 });
+
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -58,7 +61,7 @@ const App = () => {
           <nav>
             <ul>
               <li><a href="#Map">Map</a></li>
-              {/*<li><a href="#Country">Country Pages</a></li>*/}
+              <li><a href="#Country">Country Pages</a></li>
               <li><a href="#About">About</a></li>
               <li><a href="#TeamInfo">Team Info</a></li>
               <li>
@@ -79,7 +82,7 @@ const App = () => {
         ) : currentPage === '#About' ? (
           // If current page is #About, show the About component
           <About />
-        ) : /* currentPage.startsWith('#Country') ? (
+        ) : currentPage.startsWith('#Country') ? (
           // If current page is #Country, show the Country Writeup component
           <>
             <CountryDataSearch
@@ -89,19 +92,43 @@ const App = () => {
             />
             <CountryWriteup externalSelectedCountry={selectedCountry} onClearSearch={clearSearch} />
           </>
-        ) :*/ (
-          // If current page is not #TeamInfo, show the Map and CountryDataSearch components
-          <>
-            <CountryDataSearch
-              onCountrySelect={setSelectedCountry}
-              clearSearchTrigger={clearSearchTrigger}
-              onResetClearSearch={() => setClearSearchTrigger(false)}
-            />
-            <Map externalSelectedCountry={selectedCountry} onClearSearch={clearSearch} />
-          </>
-        )}
+        ) : (
+            // If current page is not #TeamInfo, show the Map and CountryDataSearch components
+            <>
+              <CountryDataSearch
+                onCountrySelect={setSelectedCountry}
+                clearSearchTrigger={clearSearchTrigger}
+                onResetClearSearch={() => setClearSearchTrigger(false)}
+              />
+              <Map
+                externalSelectedCountry={selectedCountry}
+                onClearSearch={clearSearch}
+                setGlobalLabelPosition={setLabelPosition}
+                setGlobalHoveredCountry={setHoveredCountry}
+              />
+            </>
+          )}
         <div className="footer"></div>
       </ZoomWrapper>
+      {hoveredCountry && (
+        <div
+          className="label"
+          style={{
+            position: "fixed",
+            top: labelPosition.y,
+            left: labelPosition.x,
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            color: "white",
+            padding: "5px 10px",
+            borderRadius: "5px",
+            pointerEvents: "none",
+            whiteSpace: "nowrap",
+            fontSize: "0.9rem",
+          }}
+        >
+          {hoveredCountry}
+        </div>
+      )}
     </div>
   );
 };
