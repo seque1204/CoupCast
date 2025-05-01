@@ -63,7 +63,7 @@ const Team = () => {
     {
       name: "Patricia Juarbe Rivera",
       role: "Public Policy | Economics",
-      image: "/images/PatriciaJuarbe.jpg",
+      image: "/images/PatriciaJuarbe.jpeg",
       links: [
         { icon: "envelope", url: "mailto:patriciajuarbe6@gmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/particiajuarbe/" }
@@ -81,7 +81,7 @@ const Team = () => {
     {
       name: "Morgan Blankenship",
       role: "Media Arts and Studies | Political Science",
-      image: "/images/Morgan_picture.jpeg",
+      image: "/images/MorganBlankenship.jpeg",
       links: [
         { icon: "envelope", url: "mailto: morganb20@hotmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/morgan-blankenship-653740226/" }
@@ -121,7 +121,7 @@ const Team = () => {
     {
       name: "Logan Hester",
       role: "Computer Science",
-      image: "/images/catWaraMeme.jpg",
+      image: "/images/LoganHester.jpg",
       links: [
         { icon: "envelope", url: "mailto:sarah@uky.edu" },
         { icon: "linkedin", url: "#" }

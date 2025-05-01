@@ -123,7 +123,6 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
     "Protests": 100,
     "Military_regime": 0,
     "Military_influence": 100,
-    "Military_influence": 100,
 
   };
 
