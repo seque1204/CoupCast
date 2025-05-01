@@ -54,7 +54,7 @@ const Team = () => {
     {
       name: "Camila Pimentel",
       role: "Political Science | International Studies",
-      image: "/images/Camila_picture.png",
+      image: "/images/Camila_picture.jpeg",
       links: [
         { icon: "envelope", url: "mailto:camilatavarespimentel@gmail.com" },
         { icon: "linkedin", url: "https://www.linkedin.com/in/camila-pimentel-053608207/" }
