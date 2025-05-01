@@ -123,7 +123,6 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
     "Protests": 100,
     "Military_regime": 0,
     "Military_influence": 100,
-    "Military_influence": 100,
 
   };
 
@@ -290,12 +289,17 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
 
     if (selectedCountry && countryData && countryDataOG) {
       const originalValue = countryDataOG[key];
-      const updatedValue = key === "Military_regime"
-        ? sliderVal // Direct toggle value
-        : originalValue * (sliderVal / 100);
+      let updatedValue;
 
-      // Update the actual model data
-      countryData[key] = updatedValue;
+      if (key === "Military_regime") {
+        updatedValue = sliderVal;
+      } else {
+        const isNegative = originalValue < 0;
+        const factor = sliderVal / 100;
+        updatedValue = isNegative
+          ? originalValue * (2 - factor) // Inverts the scale for negatives
+          : originalValue * factor;
+      }
 
       // Calculate prediction
       const Trade = countryData['Trade'] ?? 0;
@@ -672,13 +676,13 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
             boxShadow: '2px 2px 5px rgba(0,0,0,0.3)',
             cursor: 'pointer',
             zIndex: 1000,
-            display: 'flex',        
-            alignItems: 'center',   
-            justifyContent: 'center', 
-            fontWeight: 'bold',     
-            fontSize: '0.7rem',    
-            color: '#000',          
-            userSelect: 'none',     
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 'bold',
+            fontSize: '0.7rem',
+            color: '#000',
+            userSelect: 'none',
           }}
           onClick={toggleInstructions}
           aria-label="Help"
