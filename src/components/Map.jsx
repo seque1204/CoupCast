@@ -836,7 +836,7 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
               userSelect: 'none',
             }}
           >
-            {locked ? "Scroll Zoom ON" : "Scroll Zoom OFF"}
+            {locked ? "Lock Zoom ON" : "Lock Zoom OFF"}
           </div>
         </div>
 
@@ -1041,11 +1041,20 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
                 )
               )}
 
-              <button className="CountryWriteup" onClick={() => {
+              {/* <button className="CountryWriteup" onClick={() => {
                 window.location.hash = `#Country?name=${encodeURIComponent(selectedCountry)}`;
               }} style={{ marginTop: '20px', textAlign: 'center' }} >
-                {/*View Country Writeup*/}
-              </button>
+                {"View Country Writeup"}
+              </button> */}
+              <a
+                className="CountryWriteup"
+                href={`https://www.google.com/search?q=${encodeURIComponent(selectedCountry + " coup news")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ marginTop: '20px', textAlign: 'center', display: 'inline-block', padding: '8px 16px', background: '#eee', textDecoration: 'none', borderRadius: '4px' }}
+              >
+                View Country Coup News
+              </a>
 
             </>
           ) : (
