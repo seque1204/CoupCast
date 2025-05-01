@@ -289,17 +289,23 @@ const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, s
 
     if (selectedCountry && countryData && countryDataOG) {
       const originalValue = countryDataOG[key];
-      let updatedValue;
+      const updatedValue = key === "Military_regime"
 
-      if (key === "Military_regime") {
-        updatedValue = sliderVal;
-      } else {
-        const isNegative = originalValue < 0;
-        const factor = sliderVal / 100;
-        updatedValue = isNegative
-          ? originalValue * (2 - factor) // Inverts the scale for negatives
-          : originalValue * factor;
-      }
+ 
+
+      ? sliderVal // Direct toggle value
+
+
+      : originalValue * (sliderVal / 100);
+
+
+
+
+
+    // Update the actual model data
+
+
+    countryData[key] = updatedValue;
 
       // Calculate prediction
       const Trade = countryData['Trade'] ?? 0;
