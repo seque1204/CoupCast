@@ -112,10 +112,10 @@ const Team = () => {
     {
       name: "Alexander Young",
       role: "Computer Science",
-      image: "/images/catWaraMeme.jpg",
+      image: "/images/AlexanderYoung.jpg",
       links: [
-        { icon: "envelope", url: "mailto:sarah@uky.edu" },
-        { icon: "linkedin", url: "#" }
+        { icon: "envelope", url: "mailto:alexandersy04@gmail.com" },
+        { icon: "linkedin", url: "https://www.linkedin.com/in/alexander-young-a37124224/" }
       ]
     },
     {

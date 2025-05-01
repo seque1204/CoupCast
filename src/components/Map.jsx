@@ -91,7 +91,7 @@ const CircleProgress = ({ value, size = 50, stroke = 6 }) => {
 };
 
 
-const Map = ({ externalSelectedCountry, onClearSearch }) => {
+const Map = ({ externalSelectedCountry, onClearSearch, setGlobalLabelPosition, setGlobalHoveredCountry }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [data, setData] = useState([]);
   const [dataOG, setDataOG] = useState([]);
@@ -101,8 +101,6 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   const [targetCenter, setTargetCenter] = useState([10, 0]);
   const [manualZoom, setManualZoom] = useState(true);
   const [locked, setLocked] = useState(true);
-  const [hoveredCountry, setHoveredCountry] = useState(null);
-  const [labelPosition, setLabelPosition] = useState({ x: 0, y: 0 });
   const [countrySliders, setCountrySliders] = useState({});
   const [sliderValues, setSliderValues] = useState({});
   const [scoredState, setScoredState] = useState(false);
@@ -124,6 +122,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
     "Women_political_participation": 100,
     "Protests": 100,
     "Military_regime": 0,
+    "Military_influence": 100,
     "Military_influence": 100,
 
   };
@@ -226,6 +225,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   const handleCountryClick = (geo) => {
     const countryName = geo.properties.name;
     setSelectedCountry(countryName);
+    setGlobalHoveredCountry(null)
     if (onClearSearch) {
       onClearSearch();
     }
@@ -261,12 +261,14 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   const handleMapClick = (event) => {
     if (event.target.tagName === 'svg' || event.target.tagName === 'path') {
       setSelectedCountry(null);
+      setGlobalHoveredCountry(null)
       setManualZoom(false);
       setTargetCenter([10, 5]);
       setTargetZoom(1.3);
     }
     if (!event.target.closest(".geography")) {
       setSelectedCountry(null);
+      setGlobalHoveredCountry(null)
       setManualZoom(false);
       setTargetCenter([10, 5]);
       setTargetZoom(1.3);
@@ -274,7 +276,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
   };
 
   const handleMouseMove = (event) => {
-    setLabelPosition({ x: event.pageX + 132, y: event.pageY - 15 });
+    setGlobalLabelPosition({ x: event.clientX + 20, y: event.clientY + 20 });
   };
 
   const handleSliderChange = (e, key) => {
@@ -599,8 +601,8 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
                               event.stopPropagation();
                               handleCountryClick(geo);
                             }}
-                            onMouseEnter={() => setHoveredCountry(geo.properties.name)}
-                            onMouseLeave={() => setHoveredCountry(null)}
+                            onMouseEnter={() => setGlobalHoveredCountry(geo.properties.name)}
+                            onMouseLeave={() => setGlobalHoveredCountry(null)}
                             style={{
                               default: {
                                 fill: colorScale(prob, maxPredictionProb),
@@ -630,8 +632,8 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
                             event.stopPropagation();
                             handleCountryClick(selectedGeo);
                           }}
-                          onMouseEnter={() => setHoveredCountry(selectedGeo.properties.name)}
-                          onMouseLeave={() => setHoveredCountry(null)}
+                          onMouseEnter={() => setGlobalHoveredCountry(geo.properties.name)}
+                          onMouseLeave={() => setGlobalHoveredCountry(null)}
                           style={{
                             default: {
                               fill: colorScale(prob, maxPredictionProb),
@@ -834,7 +836,7 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
               alignItems: 'center',
               justifyContent: 'center',
               fontWeight: 'bold',
-              fontSize: '0.5rem',
+              fontSize: '0.55rem',
               color: '#000',
               userSelect: 'none',
             }}
@@ -982,10 +984,10 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
                   <div className="slider-container">
                     {Object.keys(defaultSliders).map((key) => {
                       const maxValue = Math.max(...data.map(s => s[key] || 0));
+                      const minValue = Math.abs(Math.min(...data.map(s => s[key] || 0)));
                       const countryData = data.find(s => s['country'] === selectedCountry);
                       const countryValue = countryData ? parseFloat(countryData[key]) : null;
-                      const score = countryValue !== null && maxValue > 0 ? (countryValue / maxValue) * 10 : "N/A";
-
+                      const score = countryValue !== null && maxValue > 0 ? ((countryValue + minValue) / (maxValue + minValue)) * 10 : "N/A"
                       return (
                         <div key={key} className="slider-item">
                           <div className="split-label">
@@ -1111,25 +1113,6 @@ const Map = ({ externalSelectedCountry, onClearSearch }) => {
           )}
         </div>
       </div>
-
-      {hoveredCountry && (
-        <div
-          className="label"
-          style={{
-            position: "absolute",
-            top: labelPosition.y - 160,
-            left: labelPosition.x - 120,
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
-            color: "white",
-            padding: "5px 10px",
-            borderRadius: "5px",
-            pointerEvents: "none",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {hoveredCountry}
-        </div>
-      )}
 
       <div
         style={{
